@@ -1,0 +1,235 @@
+<!--
+File: layout.html
+Authors: ReadyTalk Engineering Intern Team 2014
+Description: HTML for the templates exclusively used in the layout for all pages.
+-->
+
+<!--
+Name: header
+Description: Houses the navbar elements.
+-->
+<template name="header">
+
+	<!-- header logo: style can be found in header.less -->
+	<header class="header">
+		<a href="/" class="logo icon navbar-logo">
+			<!-- Add the class icon to your logo image or logo icon to add the margining -->
+			<img src="#" style="max-height: 45px; margin-top: 5px"/>
+		</a>
+		<!-- Header Navbar: style can be found in header.less -->
+		<nav class="navbar navbar-static-top navbar-header" role="navigation">
+			{{#if currentUser}}
+				{{> user_logged_in}}
+			{{/if}}
+		</nav>
+	</header>
+</template>
+
+<template name="notYou">
+	<a href="#" class="btn btn-default btn-flat notYou popover-dismiss" data-container="body" data-toggle="popover" data-placement="left" id="header-notyou-button">Not You?</a>
+</template>
+
+<template name="user_logged_in">
+
+	<!-- Sidebar toggle button-->
+	<a href="#" class="navbar-btn sidebar-toggle" data-toggle="offcanvas" role="button">
+		<span class="sr-only">Toggle navigation</span>
+		<span class="icon-bar"></span>
+		<span class="icon-bar"></span>
+		<span class="icon-bar"></span>
+	</a>
+	<div class="navbar-right">
+		<ul class="nav navbar-nav">
+			<!-- Messages: style can be found in dropdown.less-->
+			<li class="dropdown messages-menu">
+				<a href="#" class="dropdown-toggle messages-dropdown" data-toggle="dropdown" style="background-color:silver">
+					<i class="fa fa-envelope"></i>
+					{{#if hasNewNotifications}}
+						<span class="label label-success">{{{getUnseenNotificationsCount}}}</span>
+					{{/if}}
+				</a>
+				<ul class="dropdown-menu">
+					<li class="header">Notifications</li>
+					<li>
+						<!-- inner menu: contains the actual data -->
+						<ul class="menu">
+							{{#each getFirstFiveNotifications}}
+								{{#if isMention}}
+									<li><!-- start message -->
+										<a target="{{this.message.room_display_name}}" href="{{pathFor 'chat'}}">
+											<div class="pull-left">
+												<img src="{{this.message.sender.avatar_url}}" alt="User Image"/>
+											</div>
+											<h4>
+												{{getTitle this.type}}
+												<small><i class="fa fa-clock-o" style="padding-right: 3px"></i>{{convertToLocalTime this.time}}</small>
+											</h4>
+											<p><strong>{{this.message.sender.display_name}}</strong> mentioned you in <strong>{{this.message.room_display_name}}!</strong></p>
+											<p>{{this.message.message}}</p>
+										</a>
+									</li><!-- end message -->
+								{{/if}}
+								{{#if isInvite}}
+									<li><!-- start message -->
+										<a target="{{this.message.room_display_name}}" href="{{pathFor 'chat'}}">
+											<div class="pull-left">
+												<img src="{{this.message.sender.avatar_url}}"  alt="User Image"/>
+											</div>
+											<h4>
+												{{getTitle this.type}}
+												<small><i class="fa fa-clock-o" style="padding-right: 3px"></i>{{convertToLocalTime this.time}}</small>
+											</h4>
+											<p><strong>{{this.message.sender.display_name}}</strong> invited you to <strong>{{this.message.room_display_name}}!</strong></p>
+										</a>
+									</li><!-- end message -->
+								{{/if}}
+							{{/each}}
+						</ul>
+					</li>
+					<li class="footer"><a href="/notifications">See All Notifications</a></li>
+				</ul>
+			</li>
+			<!-- User Account: style can be found in dropdown.less -->
+			<li class="dropdown user user-menu">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown" style="background-color:silver">
+					<i class="fa fa-user"></i>
+					<span>{{currentUser.profile.login}} <i class="caret"></i></span>
+				</a>
+				<ul class="dropdown-menu">
+					<!-- User image -->
+					<li class="user-header bg-light-blue">
+						<img src="{{currentUser.profile.avatar_url}}" alt="User Image" />
+						<p>
+							{{currentUser.profile.display_name}}
+						</p>
+					</li>
+					<!-- Menu Footer-->
+					<li class="user-footer">
+						<div class="pull-left">
+							{{> notYou}}
+						</div>
+						<div class="pull-right">
+							<a href="#" class="btn btn-default btn-flat " id="layout-header-dropdown-logout">Sign out</a>
+						</div>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+</template>
+
+<!--
+Name: global_sidebar
+Description: the sidebar
+-->
+
+
+<template name="sidebar_left">
+	<aside class="left-side sidebar-offcanvas-left">
+		<!-- sidebar: style can be found in sidebar.less -->
+		<section class="sidebar">
+			<!-- Sidebar user panel -->
+			<div class="user-panel">
+				<div class="text-center image">
+					<img src="{{currentUser.profile.avatar_url}}" class="img-circle" alt="User Image" />
+				</div>
+			</div>
+			<!-- sidebar menu: : style can be found in sidebar.less -->
+			<ul class="sidebar-menu">
+				<li>
+					<a href="/create_room">
+						<i class="fa fa-group"></i> <span>Create a Room</span>
+					</a>
+				</li>
+				<li>
+					<a href="/notifications">
+						<i class="fa fa-envelope"></i> <span>Notifications</span>
+					</a>
+				</li>
+				<li>
+					<a href="/bookmarks">
+						<i class="fa fa-star"></i> <span>Bookmarks</span>
+					</a>
+				</li>
+				<li>
+					<a href="https://github.com/ReadyTalk/accidia">
+						<i class="fa fa-github"></i> <span>GitHub Repo</span>
+					</a>
+				</li>
+				<li>
+					<a href="/">
+						<i class="fa fa-info"></i> <span>Help</span>
+					</a>
+				</li>
+			</ul>
+		</section>
+		<!-- /.sidebar -->
+	</aside>
+</template>
+
+<template name="sidebar_right">
+	<aside class="right-side sidebar-offcanvas-right">
+		{{> all_users}}
+		{{> available_rooms_stretch}}
+	</aside>
+</template>
+
+<template name="available_rooms_stretch">
+	<div class="form-control" id="available-rooms-stretch">
+		<table class="table table-hover table-condensed table-striped">
+			<thead>
+				<tr>
+					<th title="Room Name">Room</th>
+					<th></th>
+					<th class="text-right"><span class="fa fa-user" title="Active Users"></span></th>
+				</tr>
+			</thead>
+			<tbody>
+				{{#each getAvailableRooms}}
+				<tr>
+					<td class="default-table-room-name">
+						<!-- To Open in Same tab, remove "target="_blank"" -->
+						<a target="{{this.display_name}}" href="{{pathFor 'chat'}}" class="default-available-room">{{this.display_name}}</a>
+					</td>
+					{{#if isPrivate this}}
+					<td>
+						<span class="fa fa-lock" title="Private"></span>
+					</td>
+					{{else}}
+					<td></td>
+					{{/if}}
+
+					<td class="default-table-user-count text-right" style="padding-right: 7px">
+						{{this.active_users.length}}
+					</td>
+				</tr>
+				{{/each}}
+			</tbody>
+		</table>
+	</div>
+</template>
+
+<template name="all_users">
+	<div class="form-control" id="home-user-status-container">
+		<table class="table table-hover table-condensed table-striped">
+			<thead>
+				<tr>
+					<th title="User Status">All Users</th>
+					<th class="text-right">Status</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{#each sortUsers}}
+				<tr class="home-user-status-row">
+					<td class="home-user-status">
+						<a target="_blank" href="http://www.github.com/{{getLoginName this}}"><img src="{{getPic this}}"></a><p class="home-user-status-p" id="home-invite-to-one-on-one" title="Invite to 1 on 1 chat">{{this.profile.display_name}}</p>
+					</td>
+					<td class="home-user-status-icon text-right">
+						<img src="{{setStatusIcon this.onlineStatus.isOnline}}" title="{{setStatusIconTitle this.onlineStatus.isOnline}}">
+					</td>
+				</tr>
+				{{/each}}
+			</tbody>
+		</table>
+	</div>
+</template>

@@ -1,0 +1,424 @@
+<template name="chat">
+	<head>
+		<meta charset="UTF-8">
+		<meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+
+		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+		  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		  <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+		{{> header}}
+		<div class="wrapper row-offcanvas row-offcanvas-left row-offcanvas-right">
+			<!-- Left side column. contains the logo and sidebar -->
+			{{> sidebar_left}}
+
+			<!-- Middle column. Contains the navbar and content of the page -->
+			<aside class="middle">
+				<!-- Content Header (Page header) -->
+				<section class="content-header">
+					<h1>
+						{{display_name}}
+						{{#if isChatPrivate}}
+							<span class="fa fa-lock" id="title-lock" title="This room is private"></span>
+						{{/if}}
+						{{#if isRoomOwner}}
+							<span class="fa fa-times" id="delete-room" title="Delete Room"></span>
+							<span class="room-remove-confirm" style="display: none">Are you sure you want to delete this room and all content associated with it? <a class="room-remove-confirm-yes" href="">Yes</a><span style="color: #979797"> / </span><a class="room-remove-confirm-no" href="">No</a></span>
+						{{/if}}
+						<small>Chat</small>
+					</h1>
+				</section>
+
+				<!-- Main content -->
+				<section class="content">
+
+					<!-- Main row -->
+					<div class="row main-row">
+						<!-- Left col -->
+						<section class="col-lg-12 chat-container">
+
+							<div class="chat-messages-container">
+								{{#if moreThan25Messages}}
+									<div class="scroll-up text-center">...</div>
+								{{/if}}
+								{{> messages}}
+							</div>
+							{{> input}}
+
+						</section><!-- /.Left col -->
+						<!-- right col -->
+
+					</div><!-- /.row (main row) -->
+
+				</section><!-- /.content -->
+			</aside><!-- /.middle -->
+
+			{{> sidebar_right_chat}}
+		</div><!-- ./wrapper -->
+	</body>
+
+</template>
+
+<template name="sidebar_right_chat">
+	<aside class="right-side sidebar-offcanvas-right">
+		{{> room_active_users}}
+		{{> global_rooms_available}}
+	</aside>
+</template>
+
+<!--
+Name: messages
+Description: Contains message name, contents, and timestamp
+-->
+<template name="messages" class="message-style">
+	<div id="chat-box">
+		{{#each getMessages}}
+			{{> msg}}
+		{{/each}}
+	</div>
+</template>
+
+<template name="msg">
+	{{#if this.sameSenderFlag}}
+		<div class="chat-message" id="chat-message-scroll-{{index}}" style="background-color: {{backgroundColor}}; ">
+			<div class="row chat-message-row">
+				<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 message-name">
+					<div class="chat-message-name" style="color: {{nameColor}}">
+						{{#if this.sameSenderFlag}}
+						{{else}}
+							{{this.name}}
+						{{/if}}
+					</div>
+				</div>
+				<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 message-contents">
+					<div class="chat-message-contents" style="color:{{textColor}}">
+						{{{convertMsg message}}}
+					</div>
+				</div>
+				<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 message-timestamp">
+					<span class="chat-message-timestamp">
+						{{#if this.sameTimeFlag}}
+						{{else}}
+							{{convertToLocalTime time}}
+						{{/if}}
+						{{#if notSystemMsg this.type}}
+							{{#if isBookmarked this._id}}
+								<i class="fa fa-star" id='chat-full-bookmark'></i>
+							{{else}}
+								<i class="fa fa-star-o" id='chat-empty-bookmark'></i>
+							{{/if}}
+						{{else}}
+							<i style="padding-right: 15px;"></i>
+						{{/if}}
+					</span>
+				</div>
+			</div>
+		</div>
+	{{else}}
+		<div class="chat-message" id="chat-message-scroll" style="background-color: {{backgroundColor}};  border-top: 1px solid #BED6EB; border: 1px solid {{borderColor}}; border-left:none; border-right:none;">
+		<div class="row chat-message-row">
+			<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 message-name">
+				<div class="chat-message-name" style="color: {{nameColor}}">
+					{{#if this.sameSenderFlag}}
+					{{else}}
+						{{this.name}}
+					{{/if}}
+				</div>
+			</div>
+			<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 message-contents">
+				<div class="chat-message-contents" style="color:{{textColor}}">
+					{{{convertMsg message}}}
+				</div>
+			</div>
+			<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 message-timestamp">
+				<span class="chat-message-timestamp">
+					{{#if this.sameTimeFlag}}
+					{{else}}
+						{{convertToLocalTime time}}
+					{{/if}}
+					{{#if notSystemMsg this.type}}
+						{{#if isBookmarked this._id}}
+							<i class="fa fa-star" id='chat-full-bookmark'></i>
+						{{else}}
+							<i class="fa fa-star-o" id='chat-empty-bookmark'></i>
+						{{/if}}
+					{{else}}
+						<i style="padding-right: 15px;"></i>
+					{{/if}}
+				</span>
+			</div>
+		</div>
+	</div>
+	{{/if}}
+</template>
+
+<!--
+Name: room-active-users
+Description: Displays the active users in a chat room
+-->
+<template name="room_active_users">
+	<div class="form-control" id="chat-active-users">
+		<table class="table table-hover table-condensed table-striped">
+			<thead>
+				<tr>
+					<th style="font-size:13px">Active users in {{display_name}}</th>
+					<th class="text-right"><strong>{{this.active_users.length}}</strong></th>
+				</tr>
+			</thead>
+			<tbody>
+				{{#each getActiveUsers room_name}}
+				<tr>
+					<td class="chat-table-user-name">
+						<a target="_blank" href="http://www.github.com/{{getLoginName user}}" ><img class="chat-table-user-img" src="{{getPic user}}" /></a><p class="chat-table-user-name-p"><!--{{getLoginName user}}-->{{user.profile.display_name}}</p>
+					</td>
+
+					<td class="text-right">
+						<!-- {{#if user.profile.name}}
+						({{user.profile.name}})
+
+						{{/if}} -->
+					</td>
+				</tr>
+				{{/each}}
+			</tbody>
+		</table>
+	</div>
+</template>
+
+<!--
+Name: global_rooms_available
+Description: Displays the current rooms available
+-->
+<template name="global_rooms_available">
+	<div class="form-control" id="chat-available-rooms">
+		<table class="table table-hover table-condensed table-striped">
+			<thead>
+				<tr>
+					<th style="font-size:13px" title="Room Name">Available Rooms</th>
+					<th></th>
+					<th class="text-right"><span class="fa fa-user" title="Active Users"></span></th>
+				</tr>
+			</thead>
+			<tbody>
+				{{#each getAvailableRooms}}
+				<tr>
+					<td class="chat-table-room-name">
+						<!-- To Open in Same tab, remove "target="_blank"" -->
+						<a style="font-size:13px" target="{{this.display_name}}" href="{{pathFor 'chat'}}" class="default-available-room">{{this.display_name}}</a>
+					</td>
+					{{#if isPrivate this}}
+						<td>
+							<span class="fa fa-lock" title="Private"></span>
+						</td>
+					{{else}}
+						<td></td>
+					{{/if}}
+					<td class="chat-table-user-count text-right" style="padding-right: 7px">
+						{{this.active_users.length}}
+					</td>
+				</tr>
+				{{/each}}
+			</tbody>
+		</table>
+	</div>
+</template>
+
+<!--
+Name: input
+Description: Contains message input field and submit button.
+-->
+<template name="input">
+	<div class="input-group input-wrapper">
+		{{> autocomplete}}
+		<span class="input-group-addon container" id="chat-help-area">
+			<table class="chat-help-table">
+				<tbody>
+					<!-- <tr id="table-row-1">
+						<td>
+							<span class="input-group-addon btn btn-primary custom-control-send glyphicon glyphicon-upload" id="chat-upload-button" title="Upload"></span>
+						</td>
+					</tr>-->
+					{{#if isChatPrivate}}
+						<tr id="table-row-2">
+							<td>
+								<span class="input-group-addon btn btn-primary custom-control-send fa fa-plus-circle" data-toggle="modal" data-target=".invite-user-modal"  id="chat-invite-users-button" title="Invite Users"></span>
+							</td>
+						</tr>
+					{{/if}}
+					<tr id="table-row-3">
+						<td>
+							<span class="input-group-addon btn btn-primary custom-control-send fa fa-question-circle" data-toggle="modal" data-target=".bs-example-modal-lg" id="chat-help-button" title="Help"></span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			{{> help_modal}}
+			{{> inChat_invite_modal}}
+		</span>
+		<span class="input-group-addon btn btn-primary custom-control-send" id="chat-send-message-button">Send</span>
+	</div>
+</template>
+
+<!--
+Name: help_modal
+Description: Contains the modal for when the help button is clicked
+-->
+<template name="help_modal">
+	<div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content help-modal-content">
+				<div class="modal-header help-modal-header">
+					<button type="button" class="close" data-dismiss="modal" id="help-modal-close-x"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title help-modal-title"><span class="fa fa-question-circle" id="chat-modal-help-icon-lg" title="Help"></span></h4>
+				</div>
+				<div class="modal-body help-modal-body">
+					<p class="modal-body-text help-modal-body-text">This guide for GFL is adapted from a more<wbr> thorough cheat sheet on GitHub. <wbr>You can view the original <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">here</a>.</p>
+					<p class="modal-body-text">Additional notes:</p>
+					<ul>
+						<li class="modal-body-text">Insert a newline character by pressing<wbr> shift+enter.</li>
+					</ul>
+					<br>
+				</div>
+				<div class="panel panel-default help-modal-panel">
+					<div class="panel-heading accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#Links">
+						<h4 class="panel-title">
+							 <a class="accordion-toggle">Links</a>
+						</h4>
+					</div>
+					<div class="panel-collapse collapse" id="Links">
+						<div class="panel-body">
+							<pre><code>[I'm an inline-style link](https://www.google.com)<br><br>[I'm an inline-style link with title](https://www.google.com "Google's Homepage")<br><br>You can also just link certain [text link itself](https://www.reddit.com)</code></pre>
+							<a href="https://www.google.com">I'm an inline-style link</a><br><br>
+							<a href="https://www.google.com" title="Google's Homepage">I'm an inline-style link with title</a><br><br>
+							You can also just link certain <a href="www.reddit.com">text link itself</a>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-default help-modal-panel">
+					<div class="panel-heading accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#Images">
+						<h4 class="panel-title">
+							<a class="accordion-toggle">Images</a>
+						</h4>
+					</div>
+					<div class="panel-collapse collapse" id="Images">
+						<div class="panel-body">
+							<pre><code>![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")</code></pre>
+							<img src="https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png" title="Logo Title Text 1"/>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-default help-modal-panel">
+					<div class="panel-heading accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#Highlighting">
+						<h4 class="panel-title">
+							<a class="accordion-toggle">Code and Syntax Highlighting</a>
+						</h4>
+					</div>
+					<div class="panel-collapse collapse" id="Highlighting">
+						<div class="panel-body">
+							<pre><code>```javascript<br><br>var s = "JavaScript syntax highlighting";<br><br>alert(s);<br>```<br><br>```python<br>s = "Python syntax highlighting"<br>print s<br>```<br><br>```<br>No language indicated, so no syntax highlighting. <br>But let's throw in a &#60;b&#62;tag&#60;/b&#62;.<br>```</code></pre>
+							<pre><strong>var</strong> s <strong>=</strong> <span style="color: #DD1144">"JavaScript syntax highlighting"</span>;<br>alert(s);</pre>
+							<pre>s <strong>=</strong> <span style="color: #DD1144">"Python syntax highlighting"</span><br><strong>print</strong> s</pre>
+							<pre>No language indicated, so no syntax hightlighting in Markdown Here (varies on GitHub).<br>But let's throw in a &#60;b&#62;tag&#60;/b&#62;.</pre>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-default help-modal-panel">
+					<div class="panel-heading" data-toggle="collapse" data-parent="#accordion" href="#Breaks">
+						<h4 class="panel-title">
+							<a class="accordion-toggle">Line Breaks</a>
+						</h4>
+					</div>
+					<div class="panel-collapse collapse" id="Breaks">
+						<div class="panel-body">
+							<pre><code>Here's a line for us to start with.<br><br>This line is separated from the one above by two newlines, so it will be a *separate paragraph*.<br><br>This line is also a separate paragraph, but...<br><br>This line is only separated by a single newline, so it's a separate line in the *same paragraph*.</code></pre>
+							Here's a line for us to start with. <br><br><br>This line is separated from the one above by two newlines, so it will be a <em>separate paragraph</em>.<br><br><br>This line is also begins a separate paragraph, but...<br><br>This line is only separated by a single newline, so it's a separate line in the <em>same paragraph</em>.<br><br><br>(Technical note: <em>Markdown Here</em> uses GFM line breaks, so there's no need to use MD's two-space line breaks.)
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+<!--
+Name: inChat_invite_modal
+Description: ??
+-->
+<template name="inChat_invite_modal">
+	<div class="modal fade invite-user-modal" id="inviteModal" tabindex="-1" role="dialog" aria-labelledby="myMediumModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-md">
+			<div class="modal-content invite-modal-content">
+				<div class="modal-header invite-modal-header">
+					<button type="button" class="close" data-dismiss="modal" id="invite-modal-close-x"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					<span class="input-group-addon custom-control-send" id="invite-modal-header" title="Help">Invite Users to a Private Room</span>
+				</div>
+				<div class="modal-body invite-modal-body">
+					<div class="form-control" id="invite-modal-user-container">
+						<table class="table table-hover table-condensed table-striped">
+							<thead>
+								<tr>
+									<th></th>
+									<th title="User Status">User</th>
+									<th></th>
+									<th class="text-right">Status</th>
+								</tr>
+							</thead>
+							<tbody>
+								{{#each sortUsers}}
+								<tr class="invite-modal-user-row">
+									<td class="invite-icons">
+										{{#if isAllowed this}}
+											<span class="fa fa-plus" id="invite-single-user"></span>
+										{{else}}
+											<span class="fa fa-minus" id="remove-single-user"></span>
+										{{/if}}
+									</td>
+									<td class="invite-modal-data">
+										<a target="_blank" href="http://www.github.com/{{getLoginName this}}"><img src="{{getPic this}}"></a><p class="invite-modal-status-p">{{this.profile.display_name}}</p>
+									</td>
+									<td></td>
+									<td class="invite-modal-user-icon text-right">
+										<img src="{{setStatusIcon this.onlineStatus.isOnline}}" title="{{setStatusIconTitle this.onlineStatus.isOnline}}">
+									</td>
+								</tr>
+								{{/each}}
+							</tbody>
+						</table>
+						<div id="confirm-button-div">
+							<button type="button" class="btn btn-primary" data-dismiss="modal" aria-hidden="true" id="chat-modal-close-confirm">Confirm</button>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+</template>
+
+
+<template name="autocomplete">
+	{{#textareaAutocomplete settings=settings class="form-control custom-control-textarea" rows="4" id="chat-message-input" placeholder="Type your message here..." maxlength="50000"}}{{/textareaAutocomplete}}
+</template>
+
+<template name="autoCompleteUsers">
+	<span class="autocomplete-row">
+		<span class="autocomplete-user-avatar">
+			<img class="userAvatar" src="{{profile.avatar_url}}"/>
+		</span>
+		<span class="autocomplete-login-name">
+			{{profile.login}}
+		</span>
+		{{#if profile.name}}
+			<span class="autocomplete-display-name">{{profile.name}}</span>
+		{{/if}}
+	</span>
+</template>
+
+<template name="autoCompleteNotFound">
+	No matches
+</template>

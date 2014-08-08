@@ -1,0 +1,14 @@
+{
+  "packages": {
+    "iron-router": {},
+    "mocha-web": {},
+    "sockjs": {},
+    "iron-router-progress": {},
+    "flash-messages": {},
+    "SyntaxHighlighter": {},
+    "font-awesome": {},
+    "autocomplete": {},
+    "less-bootstrap-3": {},
+    "font-awesome-4-less": {}
+  }
+}

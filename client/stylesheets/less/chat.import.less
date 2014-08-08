@@ -1,0 +1,340 @@
+/*
+		Page: Chat pages
+------------------------------------
+*/
+
+.content {
+	height: calc(~"100% - 46px");
+	padding: 0;
+	.main-row {
+		height: 100%;
+		width: 100%;
+		margin: 0;
+		.chat-container {
+			height: 100%;
+			width: 100%;
+			padding: 0;
+			.chat-messages-container {
+				height: calc(~"100% - 80px");
+				width: 100%;
+				padding: 0;
+				overflow: auto;
+				overflow-x: hidden;
+				background-color: #fff;
+				#chat-box
+				{
+					.chat-message > .row > .message-timestamp >  .chat-message-timestamp > #chat-empty-bookmark,
+					.chat-message:hover > .row > .message-timestamp > .chat-message-timestamp > #chat-full-bookmark
+					{
+						visibility: hidden;
+					}
+					.chat-message:hover > .row > .message-timestamp > .chat-message-timestamp > #chat-empty-bookmark,
+					.chat-message:hover > .row > .message-timestamp > .chat-message-timestamp > #chat-full-bookmark
+					{
+						visibility: visible;
+						cursor: pointer;
+					}
+				}
+			}
+			.input-wrapper {
+				position: relative;
+				margin: 0;
+				padding: 0;
+				height: 80px;
+				width: 100%;
+				#chat-message-input
+				{	
+					position: absolute;
+					bottom: 0;
+					color: #333;
+					resize: vertical;
+					height: 80px;
+					width: calc(~"100% - 100px")
+				}
+			}
+		}
+	}
+}
+
+.chat-table-user-img
+{
+	height: 25px;
+	margin: 0px;
+	display: inline-block;
+}
+
+.chat-table-user-name-p
+{
+	font-size: 13px;
+	display: inline-block;
+	margin-bottom: 0px;
+	padding-left: 10px;
+	color: #333;
+}
+
+#chat-active-users,
+#chat-available-rooms {
+	overflow-y: auto;
+	overflow-x: hidden;
+	height: 50%;
+	border-top: none;
+	th,
+	td,
+	td a {
+		color: #333;
+	}
+}
+.chat-message-row
+{
+	width: 100%;
+	margin: 0;
+	min-height: 25px;
+	.message-name
+	{
+		text-align: right;
+		padding-top: 5px;
+		min-height: 35px;
+		width: 14.66666667%;
+		border-right: 1px solid #BED6EB;
+		.chat-message-name
+		{
+			font-size: 1em;
+		}
+	}
+	.message-contents
+	{
+		width: 70.66666667%;
+		padding-top: 5px;
+		min-height: 35px;
+		.chat-message-contents
+		{
+			font-size: 1em;
+			min-height: 25px;
+			p
+			{
+				margin: 0 0 5px 0;
+				word-break: break-all;
+			}
+		}
+	}
+	.message-timestamp
+	{
+		width: 14.66666667%;
+		text-align: right;
+		margin-top: 5px;
+		.chat-message-timestamp
+		{
+			color: #777;
+			letter-spacing: .5px;
+			font-size: .85em;
+			#chat-empty-bookmark
+			{
+				padding-left: 5px;
+				color: #b2b2b2;
+			}
+			#chat-full-bookmark,
+			{
+				padding-left: 5px;
+				color: #FFCC00;
+			}
+		}
+	}
+}
+
+.help-modal-content
+{
+	.help-modal-header
+	{
+		.help-modal-title
+		{
+			#chat-modal-help-icon-lg
+			{
+				color: #00bad2;
+				font-size: 40px;
+			}
+		}
+	}
+	.help-modal-body
+	{
+		.help-modal-body-text,
+		.modal-body-text
+		{
+			color: #333;
+			text-align: left;
+		}
+		ul
+		{
+			list-style-type: none;
+			padding-left: none;
+			text-align: left;
+			margin: 0px;
+			padding: 0px;
+		}
+	}
+	.help-modal-panel
+	{
+		color: #333;
+		.panel-collapse
+		{
+			.panel-body
+			{
+				color: #333;
+				text-align: left;
+			}
+		}
+		.panel-heading:hover
+		{
+			cursor: pointer;
+			.panel-title
+			{
+				a
+				{
+					color: #555;
+				}
+			}
+		}
+	}
+}
+#chat-invite-users-button
+{
+	padding: 5px 0px 10px 0px;
+	color: #333;
+	margin: 0px 10px 0px 0px;
+	border: none;
+}
+#chat-help-button
+{
+	padding: 10px 0px 5px 0px;
+	color: #333;
+	margin: 0px 10px 0px 0px;
+}
+#chat-send-message-button
+{
+	background-color: #F4F4F4;
+	border: none;
+	border-top: 1px solid #CCCCCC;
+	color: #333;
+	&:hover
+	{
+		background-color: #ddd;
+	}
+}
+.invite-modal-content
+{
+	overflow-y: auto;
+	height: 500px;
+	.invite-modal-header
+	{
+		#invite-modal-header
+		{
+			color: #333;
+			border: none;
+			font-size: 1.2em;
+			background-color: #fff;
+		}
+	}
+	.invite-modal-body
+	{
+		color: #333;
+		border: none;
+		#invite-modal-user-container
+		{
+			border:none;
+			table
+			{
+				// height:350px;
+				thead
+				{
+					color: #333;
+				}
+				tbody
+				{
+					td
+					{
+						max-height: 36px !important;
+					}
+					.invite-modal-user-row
+					{
+						max-height: 36px;
+						.invite-icons
+						{
+							#invite-single-user
+							{
+								color: #72C066;
+								cursor: pointer;
+							}
+							#remove-single-user
+							{
+								color: #FF0000;
+								cursor: pointer;
+							}
+						}
+						.invite-modal-data
+						{
+							text-align: left;
+							color: #333;
+						}
+					}
+				}
+			}
+
+			#confirm-button-div
+			{
+				float: right;
+			}
+		}
+	}
+}
+
+
+// Autocomplete
+.-autocomplete-container
+{
+    position: absolute;
+    background: white;
+    border: 1px solid #DDD;
+    border-radius: 3px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    min-width: 180px;
+    z-index: 1000;
+}
+.userAvatar
+{
+	height: 25px;
+	width: auto;
+}
+.autocomplete-login-name
+{
+	padding: 0px 5px 0px 5px;
+}
+.autocomplete-display-name
+{
+	color: #979797;
+}
+.-autocomplete-list
+{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.-autocomplete-item
+{
+    display: block;
+    padding: 5px 10px;
+    border-bottom: 1px solid #DDD;
+}
+
+.-autocomplete-item.selected
+{
+    color: white;
+    background: #4183C4;
+    text-decoration: none;
+}
+// /Autocomplete
+
+.room-remove-confirm
+{
+	font-size: 14px;
+	color: red;
+}

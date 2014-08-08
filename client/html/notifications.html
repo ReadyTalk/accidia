@@ -1,0 +1,114 @@
+<template name="notifications">
+	<head>
+		<meta charset="UTF-8">
+		<meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+
+		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+		  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		  <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+		{{> header}}
+		<div class="wrapper row-offcanvas row-offcanvas-left row-offcanvas-right">
+			<!-- Left side column. contains the logo and sidebar -->
+			{{> sidebar_left}}
+
+			<!-- Middle column. Contains the navbar and content of the page -->
+			<aside class="middle">
+				<!-- Content Header (Page header) -->
+				<section class="content-header">
+					<h1>
+						Notifications
+					</h1>
+				</section>
+
+				<!-- Main content -->
+				<section class="content">
+
+					<!-- Main row -->
+					<div class="row main-row">
+						<!-- Left col -->
+						<section class="col-lg-12 notifications-container">
+
+							{{#if hasNoVisibleNotifications}}
+								<div>
+									You have no notifications.
+								</div>
+							{{else}}
+								{{#each getNotifications}}
+									{{#if isInvite}}
+										<div class="notification-notification invite-notification">
+											<div class="row">
+												<div class="col-md-1 user-img-col-1">
+													<img class="notification-user-img" src="{{this.message.sender.avatar_url}}"/>
+												</div>
+												<div class="col-md-11 user-col-11">
+													<div class="notification-invite-title">
+														{{{getTitle this.type}}}
+													</div>
+													<span class="notification-invite-time">
+														{{{convertToLocalTime this.time}}}
+														<span class="fa fa-trash-o" id="notification-remove-icon" title="Remove">
+														</span>
+													</span>
+													<div class="notification-invite-message">
+														<i style="color: #828282">
+															{{{this.message.message}}}
+															<a class="invite-notification-room-link" target="{{this.message.room_display_name}}" href="{{pathFor 'chat'}}">{{{this.message.room_display_name}}}</a>!
+														</i>
+													</div>
+												</div>
+												<br>
+											</div>
+										</div>
+									{{/if}}
+									{{#if isMention}}
+										<div class="notification-notification mention-notification">
+											<div class="row">
+												<div class="col-md-1 user-img-col-1">
+													<img class="notification-user-img" src="{{this.message.sender.avatar_url}}"/>
+												</div>
+												<div class="col-md-11 user-col-11">
+													<div class="notification-mention-title">
+														{{{getTitle this.type}}}
+													</div>
+													<span class="notification-mention-time">
+														{{{convertToLocalTime this.time}}}
+														<span class="fa fa-trash-o" id="notification-remove-icon" title="Remove">
+														</span>
+													</span>
+													<div class="notification-mention-message">
+														<i style="color: #828282">
+															{{{this.message.sender.display_name}}} mentioned you in
+															{{#if userHasAccessToRoom}}
+																<a class="mention-notification-room-link" target="{{this.message.room_display_name}}" href="{{pathFor 'chat'}}" title="Go to room">{{{this.message.room_display_name}}}</a>!
+															{{else}}
+																{{{this.message.room_display_name}}}! <span id="noUserAccess">You do not currently have access to this room.</span>
+															{{/if}}
+														</i>
+
+													</div>
+													<br>
+													<span class="mention-message">{{{this.message.message}}}</span>
+												</div>
+											</div>
+										</div>
+									{{/if}}
+								{{/each}}
+							{{/if}}
+
+						</section><!-- /.Left col -->
+						<!-- right col -->
+
+					</div><!-- /.row (main row) -->
+
+				</section><!-- /.content -->
+			</aside><!-- /.middle -->
+
+			{{> sidebar_right}}
+		</div><!-- ./wrapper -->
+	</body>
+</template>

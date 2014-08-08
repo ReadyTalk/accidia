@@ -1,0 +1,81 @@
+<!--
+File: home.html
+Authors: ReadyTalk Engineering Intern Team 2014
+Description: HTML for the templates exclusively used in the home page.
+-->
+
+<template name="notFound">
+    notFound
+</template>
+
+<!--
+Name: home
+Description: Sorts messages in descending order based on time.
+-->
+<template name="home">
+    <head>
+        <meta charset="UTF-8">
+        <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+          <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        {{> header}}
+        {{#if currentUser}}
+            {{> home_logged_in}}
+        {{else}}
+            {{> home_not_logged_in}}
+        {{/if}}
+    </body>
+</template>
+
+<template name="home_not_logged_in">
+    <div class="wrapper row-offcanvas row-offcanvas-left row-offcanvas-right">
+            <h1 id="readytalk-chat-login-notice">Currently, Accidia only supports logging in through GitHub.</h1>
+
+            <div id="github-login-button">
+                <button type="button" class="btn btn-primary btn-lg" id="home-content-github-login-button"><img id="github-logo" src="http://i.imgur.com/OCHWcon.png">Log in with GitHub</button>
+            </div><br>
+
+            <h4 id="readytalk-chat-register-notice">Don't have a GitHub? Get one <a href="https://github.com/join">here.</a></h4>
+    </div><!-- ./wrapper -->
+</template>
+
+<template name="home_logged_in">
+    <div class="wrapper row-offcanvas row-offcanvas-left row-offcanvas-right">
+        <!-- Left side column. contains the logo and sidebar -->
+        {{> sidebar_left}}
+
+        <!-- Middle column. Contains the navbar and content of the page -->
+        <aside class="middle">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>
+                    Home
+                </h1>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+
+                <div class="jumbotron">
+                    <div class="container">
+                        <div class="page-header">
+                            <div class="row row-centered">
+                                <h2> Welcome to ReadyTalk Chat!<br><small>A Markdown Chat<br><br>Click on a room from the list to the right to join</small></h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section><!-- /.content -->
+        </aside><!-- /.middle -->
+
+        {{> sidebar_right}}
+    </div><!-- ./wrapper -->
+</template>

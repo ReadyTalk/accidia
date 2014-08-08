@@ -1,0 +1,1 @@
+enableSidebar = true

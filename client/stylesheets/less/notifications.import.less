@@ -1,0 +1,117 @@
+.notification-notification
+{
+	padding: 5px 0px 5px 0px;
+	border-bottom: 1px solid #BED6EB;
+
+	&.mention-notification
+	{
+		background-color: #e6f4f7;
+	}
+	.notification-mention-title
+	{
+		display: inline-block;
+		font-size: 1.167em;
+		font-weight: 600;
+	}
+	.notification-mention-time
+	{
+		float: right;
+		font-size: .85em;
+		color: #777;
+		letter-spacing: .5px;
+		#notification-remove-icon
+		{
+			padding: 0px 5px 0px 0px;
+			font-size: 1.25em;
+			color: #333;
+			visibility: hidden;
+			&:hover
+			{
+				cursor: pointer;
+			}
+
+		}
+	}
+	&:hover
+	{
+		.notification-mention-time
+		{
+			#notification-remove-icon
+			{
+				color: #333;
+				visibility: visible;
+				&:hover
+				{
+					cursor: pointer;
+				}
+			}
+		}
+		.notification-invite-time
+		{
+			#notification-remove-icon
+			{
+				color: #333;
+				visibility: visible;
+				&:hover
+				{
+					cursor: pointer;
+				}
+			}
+		}
+	}
+	.notification-mention-message
+	{
+		display: inline-block;
+		padding: 0px 10px;
+		font-size: 1em;
+		.mention-message
+		{
+			word-break: break-all;
+		}
+	}
+	&.invite-notification
+	{
+		background-color: #FFFFE6;
+	}
+	.notification-invite-title
+	{
+		display: inline-block;
+		font-size: 1.167em;
+		font-weight: 600;
+	}
+	.notification-invite-message
+	{
+		display: inline-block;
+		padding: 0px 10px;
+	}
+	.notification-invite-time
+	{
+		float: right;
+		font-size: .85em;
+		color: #777;
+		letter-spacing: .5px;
+		#notification-remove-icon
+		{
+			padding: 0px 5px 0px 0px;
+			font-size: 1.25em;
+			color: #333;
+			visibility: hidden;
+			&:hover
+			{
+				cursor: pointer;
+			}
+		}
+	}
+}
+.notification-user-img
+{
+	height: 40px;
+	width: 40px;
+	border-radius: 50%;
+}
+.user-img-col-1
+{
+	padding: 0px;
+	margin-left: 15px;
+	width: 40px;
+}
