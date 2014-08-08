@@ -53,7 +53,7 @@ ServiceConfiguration.configurations.insert
 	secret: "Your Secret"
 ```
 
-This should be enough to run the application. Then just start the server using `mrt`
+This should be enough to run the application. Then just start the server using `mrt --setting config.json`
 
 ####License:
 MIT
