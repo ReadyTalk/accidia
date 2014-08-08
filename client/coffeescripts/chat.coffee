@@ -65,9 +65,9 @@ firstMessageIndex = 0
 #bool representing if the user is at the bottom of chatbox
 document.bottomCheck = null
 
-#the favicons for flashing titles
-greenFavicon = "/favicon.ico"
-blueFavicon = "/favicon2.ico"
+#the favicons for flashing titles NEEDS TO BE UPDATED
+greenFavicon = null
+blueFavicon = null
 
 #indicates if a message update was forced
 forcedUpdate = false
