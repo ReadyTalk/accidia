@@ -66,8 +66,8 @@ firstMessageIndex = 0
 document.bottomCheck = null
 
 #the favicons for flashing titles NEEDS TO BE UPDATED
-greenFavicon = null
-blueFavicon = null
+grayFavicon = "/favicon_gray.ico"
+blueFavicon = "/favicon_blue.ico"
 
 #indicates if a message update was forced
 forcedUpdate = false
@@ -146,7 +146,7 @@ Template.chat.created = ->
         setFavicon(blueFavicon)
       else
         document.title = original
-        setFavicon(greenFavicon)
+        setFavicon(grayFavicon)
     return
   ), 1500
 

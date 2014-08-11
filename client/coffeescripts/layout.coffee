@@ -33,7 +33,7 @@ Template.header.created = ->
 	#set the default favicon for the app
 	link = document.createElement("link")
 	link.rel = "icon"
-	link.href = '/favicon.ico'
+	link.href = '/favicon_blue.ico'
 	link.sizes = "16x16 32x32"
 	document.getElementsByTagName("head")[0].appendChild link
 
