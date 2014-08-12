@@ -6,7 +6,7 @@ This product is in NO WAY associated with other ReadyTalk products and will not 
 Accidia is meant to an internal collaboration tool for developers built with Meteor. It is much like other chat applications out there but with a few distinctive features that cater towards developers, the main one being that the chat supports input of MarkDown.
 
 ###Product Vision:
-The project idea was originally concieved by the engineering management team at ReadyTalk. Jesse Weave and Dan Cunningham were the two that lead the development as the project progressed over the summer. One of the major motivatiosn for this project was that many of the other tool like this out there have all sorts of various issues that we inheriently tried to avoid while developing.
+The project idea was originally concieved by the engineering management team at ReadyTalk. Jesse Weave and Dan Cunningham were the two that lead the development as the project progressed over the summer. One of the major motivations for this project was that many of the other tools like this out there have all sorts of various issues that we inheriently tried to avoid while developing.
 
 ###Completed Feature List:
  - Group chat
